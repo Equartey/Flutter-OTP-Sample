@@ -1,0 +1,129 @@
+// ignore: avoid_web_libraries_in_flutter
+// import 'dart:html';
+
+import 'package:amplify_authenticator/amplify_authenticator.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:otp_poc_app/utils/amplify_auth_x.dart';
+import 'package:otp_poc_app/utils/auth_scaffold.dart';
+import 'package:otp_poc_app/utils/loading_filled_button.dart';
+
+final _logger = AmplifyLogger().createChild('ConfrimOtp');
+
+/// The screen displayed when the user is in the Sign In state.
+class ConfirmOtpScreen extends StatefulWidget {
+  const ConfirmOtpScreen(
+      {super.key, required this.state, required this.phoneNumber});
+
+  final AuthenticatorState state;
+  final String phoneNumber;
+
+  @override
+  State<ConfirmOtpScreen> createState() => _ConfirmOtpScreenState();
+}
+
+class _ConfirmOtpScreenState extends State<ConfirmOtpScreen> {
+  bool isLoading = false;
+
+  Future<void> ConfirmOtp(
+      BuildContext context, String? phone, String code) async {
+    print('ConfirmOtpCode... $phone, $code');
+    setState(() => isLoading = true);
+    final snackbar = ScaffoldMessenger.of(context);
+
+    try {
+      final result = await Amplify.Auth.confirmOtp(
+        code: code,
+        phone: phone ?? '',
+      );
+
+      if (mounted) {
+        print(result);
+        showInfoSnackBar(snackbar, 'Code verified successfully!');
+      }
+    } on AmplifyException catch (e) {
+      _logger.info('Could not sign in: $e');
+      if (mounted) {
+        showErrorSnackBar(snackbar, 'Unable to sign in ${e.message}');
+      }
+    } finally {
+      setState(() => isLoading = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AuthScaffold(
+      title: 'Confirm your OTP',
+      builder: (context) {
+        return AuthenticatorForm(
+          child: Column(
+            children: [
+              ConfirmSignInFormField.verificationCode(),
+              LoadingFilledButton(
+                onPressed: () async {
+                  await ConfirmOtp(
+                    context,
+                    widget.phoneNumber,
+                    widget.state.confirmationCode,
+                  );
+                  // widget.state.changeStep(
+                  //   AuthenticatorStep.,
+                  // );
+                },
+                isLoading: isLoading,
+                child: const Text('Send OTP Link'),
+              ),
+              BackToSignInButton(),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+enum SignInMethod {
+  srp,
+  magicLink,
+  otp,
+}
+
+void showInfoSnackBar(ScaffoldMessengerState snackbar, String message) {
+  snackbar.showSnackBar(SnackBar(
+    backgroundColor: Colors.blue[800],
+    content: Text(message),
+  ));
+}
+
+void showErrorSnackBar(ScaffoldMessengerState snackbar, String message) {
+  snackbar.showSnackBar(SnackBar(
+    backgroundColor: Colors.red[900],
+    content: Text(message),
+  ));
+}
+
+class SignInMethodDivider extends StatelessWidget {
+  const SignInMethodDivider({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      children: [
+        SizedBox(height: 12),
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Expanded(child: Divider()),
+            SizedBox(width: 8),
+            Text('or'),
+            SizedBox(width: 8),
+            Expanded(child: Divider()),
+          ],
+        ),
+        SizedBox(height: 12),
+      ],
+    );
+  }
+}
