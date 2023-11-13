@@ -25,23 +25,25 @@ class _SignInScreenState extends State<SignInScreen> {
   bool isLoading = false;
   SignInMethod signInMethod = SignInMethod.otp;
 
-  Future<void> confirmSignInOTP(BuildContext context, String phone) async {
-    print('confirmSignInOTP... $phone');
+  Future<void> confirmSignInOTP(
+      BuildContext context, String destination) async {
+    print('confirmSignInOTP... $destination');
     setState(() => isLoading = true);
     final snackbar = ScaffoldMessenger.of(context);
 
     try {
       final result = await Amplify.Auth.sendOtp(
-        alias: phone,
+        destination: destination,
         options: SendOtpOptions(
           flow: PasswordlessFlow.signInOrSignUp,
+          deliveryMedium: OtpDeliveryMedium.SMS,
         ),
       );
 
       if (mounted) {
         print(result);
-        // final destination = result.nextStep.additionalInfo["email"];
-        showInfoSnackBar(snackbar, 'A code has been sent to $phone');
+        final destination = result.nextStep.additionalInfo["destination"];
+        showInfoSnackBar(snackbar, 'A code has been sent to $destination');
       }
     } on AmplifyException catch (e) {
       _logger.info('Could not sign in: $e');

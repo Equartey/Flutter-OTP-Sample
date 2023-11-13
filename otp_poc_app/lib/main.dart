@@ -41,7 +41,7 @@ class _MainAppState extends State<MainApp> {
 
     final configJson = AmplifyConfig(
       auth: AuthConfig.cognito(
-        authenticationFlowType: AuthenticationFlowType.userSrpAuth,
+        authenticationFlowType: AuthenticationFlowType.customAuthWithoutSrp,
         usernameAttributes: const [CognitoUserAttributeKey.phoneNumber],
         userPoolConfig: CognitoUserPoolConfig(
           poolId: poolId,
@@ -116,7 +116,13 @@ class _MainAppState extends State<MainApp> {
         builder: Authenticator.builder(),
         home: const Scaffold(
           body: Center(
-            child: Text('Amplify Demo'),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Amplify Demo'),
+                SignOutButton(),
+              ],
+            ),
           ),
         ),
       ),

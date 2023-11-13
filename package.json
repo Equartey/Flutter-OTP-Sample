@@ -402,13 +402,14 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@aws-amplify/backend": "file:/Users/quaelija/code/forks/samsara-cli-jordan/packages/backend",
-    "@aws-amplify/backend-auth": "file:/Users/quaelija/code/forks/samsara-cli-jordan/packages/backend-auth",
-    "@aws-amplify/backend-graphql": "file:/Users/quaelija/code/forks/samsara-cli-jordan/packages/backend-graphql",
-    "@aws-amplify/cli": "file:/Users/quaelija/code/forks/samsara-cli-jordan/packages/samsara-cli/cli",
-    "@aws-amplify/auth-construct-alpha": "file:/Users/quaelija/code/forks/samsara-cli-jordan/packages/auth-construct"
+    "@aws-amplify/auth-construct-alpha": "file:/Users/quaelija/code/forks/samsara-cli/packages/auth-construct",
+    "@aws-amplify/backend": "file:/Users/quaelija/code/forks/samsara-cli/packages/backend",
+    "@aws-amplify/backend-auth": "file:/Users/quaelija/code/forks/samsara-cli/packages/backend-auth",
+    "@aws-amplify/backend-cli": "^1.0.0-alpha.5",
+    "@aws-amplify/backend-graphql": "file:/Users/quaelija/code/forks/samsara-cli/packages/backend-graphql",
+    "@aws-amplify/cli": "file:/Users/quaelija/code/forks/samsara-cli/packages/samsara-cli/cli"
   },
   "overrides": {
-    "@aws-amplify/auth-construct-alpha": "file:/Users/quaelija/code/forks/samsara-cli-jordan/packages/auth-construct"
+    "@aws-amplify/auth-construct-alpha": "file:/Users/quaelija/code/forks/samsara-cli/packages/auth-construct"
   }
 }

@@ -2,12 +2,9 @@ import { Auth } from "@aws-amplify/backend-auth";
 
 export const auth = new Auth({
   loginWith: {
-    email: true,
+    phoneNumber: true,
   },
-  passwordlessAuth: {
-    otp: {
-      destination: "SMS",
-      length: 6,
-    },
+  passwordlessOptions: {
+    otp: true,
   },
 });

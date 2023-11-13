@@ -15,41 +15,50 @@ const _codePlaceholder = '##code##';
 extension OtpAuth on AuthCategory {
   /// Initiate sign in with otp by sending a code to [phoneNumber] or [email].
   Future<SignInResult> sendOtp({
-    required String alias,
+    required String destination,
     required SendOtpOptions options,
   }) async {
     // if (options.flow != PasswordlessFlow.signIn) {
     //   await _createUser(alias);
     // }
-    await _initCustomAuth(alias);
+    await _initCustomAuth(destination);
     _logger.info('Custom auth initiated. Sending OTP.');
-    final res = await Amplify.Auth.confirmSignIn(
-      confirmationValue: '__dummy__', // value will be ignored
-      options: ConfirmSignInOptions(
-        pluginOptions: CognitoConfirmSignInPluginOptions(
-          clientMetadata: {
-            'signInMethod': 'OTP',
-          },
+
+    print('sendOtp... $destination, $options');
+
+    try {
+      final res = await Amplify.Auth.confirmSignIn(
+        confirmationValue: '__dummy__', // value will be ignored
+        options: ConfirmSignInOptions(
+          pluginOptions: CognitoConfirmSignInPluginOptions(
+            clientMetadata: {
+              'signInMethod': 'OTP',
+              'deliveryMedium': options.deliveryMedium.name,
+              "action": OtpAction.REQUEST.name,
+            },
+          ),
         ),
-      ),
-    );
-    return res;
+      );
+      return res;
+    } catch (e) {
+      print('sendOtp error: $e');
+      throw e;
+    }
   }
 
   /// Sign a user in with a magic link.
   Future<SignInResult> confirmOtp({
     required String code,
-    required String phone,
   }) async {
     await Amplify.asyncConfig;
-    await _initCustomAuth(phone);
-    _logger.info('Custom auth initiated. Signing in with otp.');
+    _logger.info('Custom auth initiated. Signing in with OTP.');
     return Amplify.Auth.confirmSignIn(
       confirmationValue: code,
-      options: const ConfirmSignInOptions(
+      options: ConfirmSignInOptions(
         pluginOptions: CognitoConfirmSignInPluginOptions(
           clientMetadata: {
             'signInMethod': 'OTP',
+            "action": OtpAction.CONFIRM.name,
           },
         ),
       ),
@@ -93,14 +102,14 @@ Future<void> _createUser(String username) async {
 
 class SendOtpOptions {
   const SendOtpOptions({
-    this.otpLength = 6,
+    required this.deliveryMedium,
     this.flow = PasswordlessFlow.signIn,
   });
 
-  final int otpLength;
-
   /// Whether or not a new user should be created if one does not already exist.
   final PasswordlessFlow flow;
+
+  final OtpDeliveryMedium deliveryMedium;
 }
 
 enum SignInCodeType { magicLink, otp }
@@ -114,3 +123,7 @@ enum PasswordlessFlow {
   // already exist, the user will be created.
   signInOrSignUp,
 }
+
+enum OtpDeliveryMedium { EMAIL, SMS }
+
+enum OtpAction { REQUEST, CONFIRM }

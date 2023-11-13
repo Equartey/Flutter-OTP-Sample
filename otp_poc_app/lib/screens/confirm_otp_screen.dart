@@ -26,20 +26,18 @@ class ConfirmOtpScreen extends StatefulWidget {
 class _ConfirmOtpScreenState extends State<ConfirmOtpScreen> {
   bool isLoading = false;
 
-  Future<void> ConfirmOtp(
-      BuildContext context, String? phone, String code) async {
-    print('ConfirmOtpCode... $phone, $code');
+  Future<void> ConfirmOtp(BuildContext context, String code) async {
+    print('ConfirmOtpCode... $code');
     setState(() => isLoading = true);
     final snackbar = ScaffoldMessenger.of(context);
 
     try {
       final result = await Amplify.Auth.confirmOtp(
         code: code,
-        phone: phone ?? '',
       );
 
       if (mounted) {
-        print(result);
+        print('ConfirmOtpCode result: $result');
         showInfoSnackBar(snackbar, 'Code verified successfully!');
       }
     } on AmplifyException catch (e) {
@@ -62,16 +60,10 @@ class _ConfirmOtpScreenState extends State<ConfirmOtpScreen> {
             children: [
               ConfirmSignInFormField.verificationCode(),
               LoadingFilledButton(
-                onPressed: () async {
-                  await ConfirmOtp(
-                    context,
-                    widget.phoneNumber,
-                    widget.state.confirmationCode,
-                  );
-                  // widget.state.changeStep(
-                  //   AuthenticatorStep.,
-                  // );
-                },
+                onPressed: () => ConfirmOtp(
+                  context,
+                  widget.state.confirmationCode,
+                ),
                 isLoading: isLoading,
                 child: const Text('Send OTP Link'),
               ),
