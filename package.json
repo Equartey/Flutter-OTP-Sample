@@ -22,7 +22,7 @@
     "async": "^3.2.4",
     "async-limiter": "^1.0.1",
     "asynckit": "^0.4.0",
-    "aws-amplify": "^5.3.11",
+    "aws-amplify": "^6.0.1-api-v6-models.13c9b49.0",
     "aws-cdk": "^2.96.2",
     "aws-cdk-lib": "^2.80.0",
     "axios": "^0.26.0",
@@ -396,20 +396,15 @@
     "zod": "^3.22.2"
   },
   "scripts": {
+    "build": "tsc --build ./amplify",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@aws-amplify/auth-construct-alpha": "file:/Users/quaelija/code/forks/samsara-cli/packages/auth-construct",
-    "@aws-amplify/backend": "file:/Users/quaelija/code/forks/samsara-cli/packages/backend",
-    "@aws-amplify/backend-auth": "file:/Users/quaelija/code/forks/samsara-cli/packages/backend-auth",
-    "@aws-amplify/backend-cli": "^1.0.0-alpha.5",
-    "@aws-amplify/backend-graphql": "file:/Users/quaelija/code/forks/samsara-cli/packages/backend-graphql",
-    "@aws-amplify/cli": "file:/Users/quaelija/code/forks/samsara-cli/packages/samsara-cli/cli"
-  },
-  "overrides": {
-    "@aws-amplify/auth-construct-alpha": "file:/Users/quaelija/code/forks/samsara-cli/packages/auth-construct"
+    "@aws-amplify/backend": "file:../../forks/amplify-backend/packages/backend",
+    "@aws-amplify/backend-cli": "file:../../forks/amplify-backend/packages/cli",
+    "typescript": "^5.2.2"
   }
 }

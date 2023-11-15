@@ -6,3 +6,7 @@ otp_poc_app/.dart_tool/*
 otp_poc_app/.idea/*
 otp_poc_app/amplify/*
 amplifyconfiguration.js
+
+node_modules
+.amplify
+amplifyconfiguration*
