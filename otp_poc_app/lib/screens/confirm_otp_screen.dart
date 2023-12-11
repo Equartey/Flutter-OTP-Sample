@@ -13,11 +13,9 @@ final _logger = AmplifyLogger().createChild('ConfrimOtp');
 
 /// The screen displayed when the user is in the Sign In state.
 class ConfirmOtpScreen extends StatefulWidget {
-  const ConfirmOtpScreen(
-      {super.key, required this.state, required this.phoneNumber});
+  const ConfirmOtpScreen({super.key, required this.state});
 
   final AuthenticatorState state;
-  final String phoneNumber;
 
   @override
   State<ConfirmOtpScreen> createState() => _ConfirmOtpScreenState();
@@ -32,18 +30,23 @@ class _ConfirmOtpScreenState extends State<ConfirmOtpScreen> {
     final snackbar = ScaffoldMessenger.of(context);
 
     try {
-      final result = await Amplify.Auth.confirmOtp(
+      SignInResult result = await Amplify.Auth.confirmOtp(
         code: code,
       );
 
       if (mounted) {
         print('ConfirmOtpCode result: $result');
-        showInfoSnackBar(snackbar, 'Code verified successfully!');
+        if (result.nextStep.additionalInfo["errorCode"] ==
+            'CodeMismatchException') {
+          showErrorSnackBar(snackbar, 'Incorrect code, try again!');
+        } else {
+          showInfoSnackBar(snackbar, 'Code verified successfully!');
+        }
       }
     } on AmplifyException catch (e) {
       _logger.info('Could not sign in: $e');
       if (mounted) {
-        showErrorSnackBar(snackbar, 'Unable to sign in ${e.message}');
+        showErrorSnackBar(snackbar, '${e.message}');
       }
     } finally {
       setState(() => isLoading = false);

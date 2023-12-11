@@ -4,7 +4,11 @@ export const auth = defineAuth({
   loginWith: {
     phone: true,
   },
-  passwordlessOptions: {
-    otp: true,
+  passwordlessAuth: {
+    otp: {
+      sms: {
+        originationNumber: "+18888747169",
+      },
+    },
   },
 });

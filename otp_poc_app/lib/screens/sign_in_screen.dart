@@ -42,8 +42,9 @@ class _SignInScreenState extends State<SignInScreen> {
 
       if (mounted) {
         print(result);
-        final destination = result.nextStep.additionalInfo["destination"];
-        showInfoSnackBar(snackbar, 'A code has been sent to $destination');
+        final destination = result.nextStep.additionalInfo["deliveryMedium"];
+        showInfoSnackBar(
+            snackbar, 'A code has been sent to the user\s $destination');
       }
     } on AmplifyException catch (e) {
       _logger.info('Could not sign in: $e');
@@ -96,7 +97,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   );
                 },
                 isLoading: isLoading,
-                child: const Text('Send OTP Link'),
+                child: const Text('Send OTP'),
               ),
               const SignInMethodDivider(),
               OutlinedButton(

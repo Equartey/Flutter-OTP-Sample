@@ -32,9 +32,10 @@ extension OtpAuth on AuthCategory {
         options: ConfirmSignInOptions(
           pluginOptions: CognitoConfirmSignInPluginOptions(
             clientMetadata: {
-              'signInMethod': 'OTP',
-              'deliveryMedium': options.deliveryMedium.name,
-              "action": OtpAction.REQUEST.name,
+              'Amplify.Passwordless.signInMethod': 'OTP',
+              'Amplify.Passwordless.deliveryMedium':
+                  options.deliveryMedium.name,
+              "Amplify.Passwordless.action": OtpAction.REQUEST.name,
             },
           ),
         ),
@@ -57,8 +58,8 @@ extension OtpAuth on AuthCategory {
       options: ConfirmSignInOptions(
         pluginOptions: CognitoConfirmSignInPluginOptions(
           clientMetadata: {
-            'signInMethod': 'OTP',
-            "action": OtpAction.CONFIRM.name,
+            'Amplify.Passwordless.signInMethod': 'OTP',
+            "Amplify.Passwordless.action": OtpAction.CONFIRM.name,
           },
         ),
       ),

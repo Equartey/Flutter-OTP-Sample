@@ -42,7 +42,7 @@ class _MainAppState extends State<MainApp> {
     final configJson = AmplifyConfig(
       auth: AuthConfig.cognito(
         authenticationFlowType: AuthenticationFlowType.customAuthWithoutSrp,
-        usernameAttributes: const [CognitoUserAttributeKey.phoneNumber],
+        usernameAttributes: const [CognitoUserAttributeKey.email],
         userPoolConfig: CognitoUserPoolConfig(
           poolId: poolId,
           appClientId: appClientId,
@@ -86,10 +86,6 @@ class _MainAppState extends State<MainApp> {
           case AuthenticatorStep.confirmSignInCustomAuth:
             return ConfirmOtpScreen(
               state: state,
-              phoneNumber: state.getAttribute(
-                    CognitoUserAttributeKey.phoneNumber,
-                  ) ??
-                  'unknown',
             );
           case AuthenticatorStep.confirmSignUp:
             return AuthScaffold(
